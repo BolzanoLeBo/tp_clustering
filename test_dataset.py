@@ -55,7 +55,7 @@ for k in range(2, max_cluster + 1):
 # Tracez les résultats
 plt.plot(range(2, max_cluster + 1), silhouette_scores, label='Silhouette Score')
 plt.plot(range(2, max_cluster + 1), davies_bouldin_scores, label='Davies-Bouldin Score')
-plt.plot(range(2, max_cluster + 1), calinski_harabasz_scores, label='Calinski-Harabasz Score')
+#plt.plot(range(2, max_cluster + 1), calinski_harabasz_scores, label='Calinski-Harabasz Score')
 
 plt.xlabel('Number of Clusters')
 plt.ylabel('Score')
@@ -63,7 +63,7 @@ plt.legend()
 plt.show()
 
 # D'après la métrique d'evaluation de Calinski, on prend k=6 pour avoir le meilleur score
-k = 6
+k = 4
 model = cluster.KMeans(n_clusters =k , init ='k-means++')
 model.fit(datanp)
 tps2 = time.time ()
