@@ -34,7 +34,6 @@ max_cluster = 10
 silhouette_scores = []
 davies_bouldin_scores = []
 calinski_harabasz_scores = []
-
 for k in range(2, max_cluster + 1):
 
     # Ajustez le modèle K-means
@@ -50,7 +49,6 @@ for k in range(2, max_cluster + 1):
     silhouette_scores.append(silhouette)
     davies_bouldin_scores.append(davies_bouldin)
     calinski_harabasz_scores.append(calinski_harabasz)
-
 
 # Tracez les résultats
 plt.plot(range(2, max_cluster + 1), silhouette_scores, label='Silhouette Score')
