@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib . pyplot as plt
 from scipy . io import arff
+import time
+from sklearn import cluster
 # Parser un fichier de donnees au format arff
 # data est un tableau d ’ exemples avec pour chacun
 # la liste des valeurs des features
@@ -23,7 +25,27 @@ datanp = [ [x[0] ,x[1]] for x in databrut [ 0 ] ]
 # Ex pour f1 = [ - 0 . 0612356 , 0 . 265446 , 0 . 362039 , ...]
 f0 = [x[0] for x in datanp]  # tous les elements de la premiere colonne
 f1 = [x[1] for x in datanp] # tous les elements de la deuxieme colonne
-plt . scatter ( f0 , f1 , s = 8 )
-plt . title ( " Donnees initiales " )
-plt . show ()
 
+print ( " Appel KMeans pour une valeur fixee de k " )
+tps1 = time.time ()
+k = 3
+model = cluster.KMeans(n_clusters =k , init ='k-means++')
+model.fit(datanp)
+tps2 = time.time ()
+labels = model.labels_
+iteration = model.n_iter_
+
+
+print(f"nombre de clusters : {k} \n temps d'exécution : {round(1000*(tps2 - tps1))}")
+plt.figure(figsize=(10, 5))
+
+# Plot for initial data
+plt.subplot(1, 2, 1)  # 1 row, 2 columns, first subplot
+plt.scatter(f0, f1, s=8)
+plt.title("Données initiales")
+
+# Plot for data after KMeans clustering
+plt.subplot(1, 2, 2)  # 1 row, 2 columns, second subplot
+plt.scatter(f0, f1, c=labels, s=8)
+plt.title("Données après clustering KMeans")
+plt.show()
