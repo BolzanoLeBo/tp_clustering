@@ -17,13 +17,11 @@ from scipy . io import arff
 path = '../clustering-benchmark/src/main/resources/datasets/artificial/'
 databrut = arff.loadarff(open( path + "xclara.arff" , 'r') )
 datanp = [ [x[0] ,x[1]] for x in databrut [ 0 ] ]
-print(datanp)
 # Affichage en 2D
 # Extraire chaque valeur de features pour en faire une liste
 # Ex pour f0 = [ - 0 . 499261 , -1 . 51369 , -1 . 60321 , ...]
 # Ex pour f1 = [ - 0 . 0612356 , 0 . 265446 , 0 . 362039 , ...]
 f0 = [x[0] for x in datanp]  # tous les elements de la premiere colonne
-print(f0)
 f1 = [x[1] for x in datanp] # tous les elements de la deuxieme colonne
 plt . scatter ( f0 , f1 , s = 8 )
 plt . title ( " Donnees initiales " )
