@@ -20,17 +20,16 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_har
 #
 # Note : chaque exemple du jeu de donnees contient aussi un
 # numero de cluster.On retire cette information
-path = '../clustering-benchmark/src/main/resources/datasets/artificial/'
-databrut = arff.loadarff(open( path +"xclara.arff", 'r') )
-datanp = [ [x[0] ,x[1]] for x in databrut [ 0 ] ]
+path = '/home/acosta/Bureau/tp3_clustering/dataset-rapport/x1.txt'
+# Open the file in read mode
+databrut = np.loadtxt(path)
+datanp = [ [x[0] ,x[1]] for x in databrut]
 # Affichage en 2D
 # Extraire chaque valeur de features pour en faire une liste
 # Ex pour f0 = [ - 0.499261 , -1.51369 , -1.60321 , ...]
 # Ex pour f1 = [ - 0.0612356 , 0.265446 , 0.362039 , ...]
 f0 = [x[0] for x in datanp]  # tous les elements de la premiere colonne
 f1 = [x[1] for x in datanp] # tous les elements de la deuxieme colonne
-
-
 
 
 # Donnees dans datanp
@@ -43,25 +42,27 @@ distance_sort = 'descending' ,
 show_leaf_counts = False )
 plt.plot()
 '''
-# set distance_threshold(0 ensures we compute the full tree )
-#silhouette calvinski davies 
 linkage_l = ['single', 'average', 'complete', 'ward']
 for l in linkage_l : 
     scores_name= ["silhouette", "calvinski", "davies"]
     best_results = [[0],[0],[0]]
     scores = [[], [], []]
-    dist_max = 1000
-    step = 10
-    distances = np.arange(1, dist_max + 1, step)
-    for d in distances: 
-        print(d/dist_max)
+    #np.arrange(d_min, d_max, step)
+    distances = {'single' : np.arange(1000, 5000 + 1, 500),
+                 'average' :  np.arange(100000, 600000 + 1, 100000),
+                 'complete' : np.arange(100000, 1000000 + 1, 100000), 
+                 'ward' : np.arange(100000, 1000000 + 1, 100000)
+                }
+    for d in distances[l]: 
+        d_min = distances[l][0]
+        d_max = distances[l][-1]
+        os.system('clear')
+        print(100*(d-d_min)/(d_max-d_min),"%")
+        
         tps1 = time.time ()
-        model = cluster.AgglomerativeClustering(distance_threshold = d ,linkage = l , n_clusters = None )
-        model = model.fit(datanp )
+        model = cluster.AgglomerativeClustering(distance_threshold = d ,linkage = l , n_clusters = None)
+        labels = model.fit_predict(datanp)
         tps2 = time.time ()
-        labels = model.labels_
-        print(len(labels), labels)
-        breakpoint()
         k = model.n_clusters_
         leaves = model.n_leaves_
         #check score
@@ -108,15 +109,15 @@ for l in linkage_l :
     plt.figure(figsize=(10, 6))
     plt.suptitle(f"Clustering Scores for Linkage: {l}")
     plt.subplot(1, 2, 1)
-    plt.plot(distances, scores[0], marker='o', label='Silhouette')
-    plt.plot(distances, scores[2], marker='^', label='Davies-Bouldin')
+    plt.plot(distances[l], scores[0], marker='o', label='Silhouette')
+    plt.plot(distances[l], scores[2], marker='^', label='Davies-Bouldin')
     plt.xlabel('Distance Threshold')
     plt.ylabel('Score')
     plt.title('Silhouette & Davies-Bouldin Scores')
     plt.legend()
 
     plt.subplot(1, 2, 2)
-    plt.plot(distances, scores[1], marker='s', label='Calinski-Harabasz')
+    plt.plot(distances[l], scores[1], marker='s', label='Calinski-Harabasz')
     plt.xlabel('Distance Threshold')
     plt.ylabel('Score')
     plt.title('Calinski-Harabasz Scores')
