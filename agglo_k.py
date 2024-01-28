@@ -6,6 +6,7 @@ from sklearn import cluster
 import scipy.cluster.hierarchy as shc
 import os 
 from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
+import sys 
 # Parser un fichier de donnees au format arff
 # data est un tableau d ’ exemples avec pour chacun
 # la liste des valeurs des features
@@ -19,7 +20,7 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_har
 #
 # Note : chaque exemple du jeu de donnees contient aussi un
 # numero de cluster.On retire cette information
-path = '/home/acosta/Bureau/tp3_clustering/dataset-rapport/x1.txt'
+path = '../dataset-rapport/x1.txt'
 # Open the file in read mode
 databrut = np.loadtxt(path)
 datanp = [ [x[0] ,x[1]] for x in databrut  ]
@@ -33,21 +34,38 @@ f1 = [x[1] for x in datanp] # tous les elements de la deuxieme colonne
 scores_name= ["silhouette", "calvinski", "davies"]
 best_results = [[0],[0],[0]]
 scores = [[], [], []]
-max_cluster = 10
 
-dist_max = 10
-step = 1
-distances = np.arange(2, dist_max + 1, step)
+if len(sys.argv) > 1 : 
+    linkage = sys.argv[1]
+else : 
+    linkage = 'average'
 
-for k in range(2, max_cluster + 1):
+max_cluster = 30
 
-    # Ajustez le modèle K-means
+
+n_clusters = np.arange(2, max_cluster + 1 )
+
+#tableau contenant les temps d'exécution pour tous les k 
+list_t = np.zeros(len(n_clusters))
+
+
+for k in n_clusters:
+    
+    #print the progression
+    k_min = n_clusters[0]
+    k_max = n_clusters[-1]
+    print(100*(k-k_min)/(k_max-k_min),"%")
+    
+    
     tps1 = time.time ()
-    model = cluster.AgglomerativeClustering(linkage = 'average' , n_clusters = k)
+    #création du model 
+    model = cluster.AgglomerativeClustering(linkage = linkage , n_clusters = k)
     model = model.fit(datanp)
     tps2 = time.time ()
+    
+    list_t[k-2] = round (( tps2 - tps1 ) * 1000 , 2 )
+    
     labels = model.labels_
-    #d=model.distances_
     leaves = model.n_leaves_
 
     # Calculez les métriques d'évaluation
@@ -59,6 +77,8 @@ for k in range(2, max_cluster + 1):
     scores[1].append(calinski_harabasz)
     scores[2].append(davies_bouldin)
 
+    
+    #Trouver le meilleur score pour chacune des métrique d'évaluation 
     if silhouette >= best_results[0][0] :
         best_results[0] = [silhouette, k, leaves, labels]
     if calinski_harabasz >= best_results[1][0] :
@@ -67,35 +87,41 @@ for k in range(2, max_cluster + 1):
         best_results[2] = [davies_bouldin , k, leaves, labels]
 
 # Affichage clustering
-plt.figure(figsize=(10,15))
+plt.figure(figsize=(18, 10))
+plt.suptitle(f"Aglomerative Clustering Results by choosing k for Linkage: {linkage}")
 
-for i in range(len(best_results)) : 
-    [score, k, leaves, labels] = best_results[i]
-    plt.subplot(3,1,1+i)
-    plt.scatter(f0 , f1 , c = labels, s = 8 )
-    plt.title(f"nb clusters ={k} / nb feuilles = {leaves} score {scores_name[i]}")
-    print("nb clusters =",k ,", nb feuilles =", leaves ,"runtime =", round (( tps2 - tps1 ) * 1000 , 2 ) ,"ms")
+for i, (score, k, leaves, labels) in enumerate(best_results):
+    plt.subplot(2, 3, i+1)  # 2 rows, 3 columns, subplot index from 1 to 3 for the first row
+    plt.scatter(f0, f1, c=labels, s=8)
+    plt.title(f"nb clusters = {k} / nb feuilles = {leaves} score {scores_name[i]}")
 
-# Plotting each set of scores
-plt.figure(figsize=(10, 6))
-plt.subplot(1,2,1)
-plt.plot(distances, scores[0], marker='o', label='Silhouette')
-plt.plot(distances, scores[2], marker='^', label='Davies-Bouldin')
-
-plt.xlabel('Distance Threshold')
+# Second row for the clustering scores and runtimes
+# Silhouette and Davies-Bouldin scores
+plt.subplot(2, 3, 4)  # Bottom row, first column
+plt.plot(n_clusters, scores[0], marker='o', label='Silhouette')
+plt.plot(n_clusters, scores[2], marker='^', label='Davies-Bouldin')
+plt.xlabel('k')
 plt.ylabel('Score')
-plt.title('Clustering Scores by K-Means')
-# Adding a legend
+plt.title('Clustering Scores')
 plt.legend()
 
-plt.subplot(1,2,2)
-plt.plot(distances, scores[1], marker='s', label='Calinski-Harabasz')
-# Adding labels and title
-plt.xlabel('Distance Threshold')
+# Calinski-Harabasz score
+plt.subplot(2, 3, 5)  # Bottom row, second column
+plt.plot(n_clusters, scores[1], marker='s', label='Calinski-Harabasz')
+plt.xlabel('k')
 plt.ylabel('Score')
-plt.title('Clustering Scores by K-Means')
-# Adding a legend
+plt.title('Clustering Scores')
 plt.legend()
-print(scores[0][3])
+
+# Runtimes
+plt.subplot(2, 3, 6)  # Bottom row, third column
+plt.plot(n_clusters, list_t, marker='o')
+plt.xlabel('k')
+plt.ylabel('Runtime (ms)')
+plt.title('Runtimes')
+
+# Adjust the layout to avoid overlap and display all subplots clearly
+plt.tight_layout()
 plt.show()
+
 

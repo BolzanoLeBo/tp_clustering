@@ -20,7 +20,7 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_har
 #
 # Note : chaque exemple du jeu de donnees contient aussi un
 # numero de cluster.On retire cette information
-path = '/home/acosta/Bureau/tp3_clustering/dataset-rapport/x1.txt'
+path = '../dataset-rapport/x1.txt'
 # Open the file in read mode
 databrut = np.loadtxt(path)
 datanp = [ [x[0] ,x[1]] for x in databrut]
