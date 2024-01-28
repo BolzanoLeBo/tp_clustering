@@ -40,7 +40,7 @@ if len(sys.argv) > 1 :
 else : 
     linkage = 'average'
 
-max_cluster = 30
+max_cluster = 50
 
 
 n_clusters = np.arange(2, max_cluster + 1 )
@@ -91,13 +91,13 @@ plt.figure(figsize=(18, 10))
 plt.suptitle(f"Aglomerative Clustering Results by choosing k for Linkage: {linkage}")
 
 for i, (score, k, leaves, labels) in enumerate(best_results):
-    plt.subplot(2, 3, i+1)  # 2 rows, 3 columns, subplot index from 1 to 3 for the first row
+    plt.subplot(2, 3, i+1)  
     plt.scatter(f0, f1, c=labels, s=8)
     plt.title(f"nb clusters = {k} / nb feuilles = {leaves} score {scores_name[i]}")
 
 # Second row for the clustering scores and runtimes
 # Silhouette and Davies-Bouldin scores
-plt.subplot(2, 3, 4)  # Bottom row, first column
+plt.subplot(2, 3, 4) 
 plt.plot(n_clusters, scores[0], marker='o', label='Silhouette')
 plt.plot(n_clusters, scores[2], marker='^', label='Davies-Bouldin')
 plt.xlabel('k')
@@ -106,7 +106,7 @@ plt.title('Clustering Scores')
 plt.legend()
 
 # Calinski-Harabasz score
-plt.subplot(2, 3, 5)  # Bottom row, second column
+plt.subplot(2, 3, 5) 
 plt.plot(n_clusters, scores[1], marker='s', label='Calinski-Harabasz')
 plt.xlabel('k')
 plt.ylabel('Score')
@@ -114,13 +114,12 @@ plt.title('Clustering Scores')
 plt.legend()
 
 # Runtimes
-plt.subplot(2, 3, 6)  # Bottom row, third column
+plt.subplot(2, 3, 6) 
 plt.plot(n_clusters, list_t, marker='o')
 plt.xlabel('k')
 plt.ylabel('Runtime (ms)')
 plt.title('Runtimes')
 
-# Adjust the layout to avoid overlap and display all subplots clearly
 plt.tight_layout()
 plt.show()
 

@@ -19,19 +19,14 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_har
 # numero de cluster.On retire cette information
 path = '../dataset-rapport/x1.txt'
 # Open the file in read mode
-with open(path, 'r') as file:
-    # Read the entire contents of the file
-    databrut = file.readlines()
-
-# Extract each column
-column_0 = [int(line.split()[0]) for line in databrut]
-column_1 = [int(line.split()[1]) for line in databrut]
-
-datanp = [[column_0[i], column_1[i]] for i in range(min(len(column_0), len(column_1)))]
-
-# Convert the lists to NumPy arrays
-f0 = np.array(column_0)
-f1 = np.array(column_1)
+databrut = np.loadtxt(path)
+datanp = [ [x[0] ,x[1]] for x in databrut  ]
+# Affichage en 2D
+# Extraire chaque valeur de features pour en faire une liste
+# Ex pour f0 = [ - 0.499261 , -1.51369 , -1.60321 , ...]
+# Ex pour f1 = [ - 0.0612356 , 0.265446 , 0.362039 , ...]
+f0 = [x[0] for x in datanp]  # tous les elements de la premiere colonne
+f1 = [x[1] for x in datanp] # tous les elements de la deuxieme colonne
 
 
 # Affichage en 2D
@@ -42,7 +37,7 @@ f1 = np.array(column_1)
 #f1 = [x[1] for x in array_1] # tous les elements de la deuxieme colonne
 
 tps1 = time.time ()
-max_cluster = 10
+max_cluster = 30
 
 scores_name= ["silhouette", "calvinski", "davies"]
 best_results = [[0],[0],[0]]
@@ -92,13 +87,13 @@ plt.figure(figsize=(18, 10))
 plt.suptitle(f"kmean results")
 
 for i, (score, k, labels) in enumerate(best_results):
-    plt.subplot(2, 3, i+1)  # 2 rows, 3 columns, subplot index from 1 to 3 for the first row
+    plt.subplot(2, 3, i+1) 
     plt.scatter(f0, f1, c=labels, s=8)
     plt.title(f"nb clusters = {k} / score {scores_name[i]}")
 
 # Second row for the clustering scores and runtimes
 # Silhouette and Davies-Bouldin scores
-plt.subplot(2, 3, 4)  # Bottom row, first column
+plt.subplot(2, 3, 4) 
 plt.plot(n_clusters, scores[0], marker='o', label='Silhouette')
 plt.plot(n_clusters, scores[2], marker='^', label='Davies-Bouldin')
 plt.xlabel('k')
@@ -107,7 +102,7 @@ plt.title('Clustering Scores')
 plt.legend()
 
 # Calinski-Harabasz score
-plt.subplot(2, 3, 5)  # Bottom row, second column
+plt.subplot(2, 3, 5)  
 plt.plot(n_clusters, scores[1], marker='s', label='Calinski-Harabasz')
 plt.xlabel('k')
 plt.ylabel('Score')
@@ -115,13 +110,13 @@ plt.title('Clustering Scores')
 plt.legend()
 
 # Runtimes
-plt.subplot(2, 3, 6)  # Bottom row, third column
+plt.subplot(2, 3, 6)  
 plt.plot(n_clusters, list_t, marker='o')
 plt.xlabel('k')
 plt.ylabel('Runtime (ms)')
 plt.title('Runtimes')
 
-# Adjust the layout to avoid overlap and display all subplots clearly
+
 plt.tight_layout()
 plt.show()
 

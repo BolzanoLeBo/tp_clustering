@@ -21,7 +21,7 @@ import sys
 #
 # Note : chaque exemple du jeu de donnees contient aussi un
 # numero de cluster.On retire cette information
-path = '../dataset-rapport/x1.txt'
+path = '../dataset-rapport/X1.txt'
 # Open the file in read mode
 databrut = np.loadtxt(path)
 datanp = [ [x[0] ,x[1]] for x in databrut]
@@ -49,13 +49,13 @@ distance_sort = 'descending' ,
 show_leaf_counts = False )
 plt.plot()
 '''
-linkage_l = ['single', 'average', 'complete', 'ward']
+
 scores_name= ["silhouette", "calvinski", "davies"]
 best_results = [[0],[0],[0]]
 scores = [[], [], []]
-d_min = 1000
-d_max = 2000
-step = 100
+d_min = 5000
+d_max = 500000
+step = 10000
 distances = np.arange(d_min, d_max, step)
 list_t = []
 for d in distances: 
@@ -98,18 +98,18 @@ for d in distances:
         best_results[2] = [davies, k, d, leaves, labels]
 
 # Affichage clustering
-# Affichage clustering
+
 plt.figure(figsize=(18, 10))
 plt.suptitle(f"Aglomerative Clustering Results by choosing dist for Linkage: {linkage}")
 
 for i, (score, k, d, leaves, labels) in enumerate(best_results):
-    plt.subplot(2, 3, i+1)  # 2 rows, 3 columns, subplot index from 1 to 3 for the first row
+    plt.subplot(2, 3, i+1)  
     plt.scatter(f0, f1, c=labels, s=8)
     plt.title(f"nb clusters = {k} / dist = {d} / nb feuilles = {leaves} score {scores_name[i]}")
 
 # Second row for the clustering scores and runtimes
 # Silhouette and Davies-Bouldin scores
-plt.subplot(2, 3, 4)  # Bottom row, first column
+plt.subplot(2, 3, 4) 
 plt.plot(distances, scores[0], marker='o', label='Silhouette')
 plt.plot(distances, scores[2], marker='^', label='Davies-Bouldin')
 plt.xlabel('distance')
@@ -118,7 +118,7 @@ plt.title('Clustering Scores')
 plt.legend()
 
 # Calinski-Harabasz score
-plt.subplot(2, 3, 5)  # Bottom row, second column
+plt.subplot(2, 3, 5) 
 plt.plot(distances, scores[1], marker='s', label='Calinski-Harabasz')
 plt.xlabel('distance')
 plt.ylabel('Score')
@@ -126,12 +126,11 @@ plt.title('Clustering Scores')
 plt.legend()
 
 # Runtimes
-plt.subplot(2, 3, 6)  # Bottom row, third column
+plt.subplot(2, 3, 6) 
 plt.plot(distances, list_t, marker='o')
 plt.xlabel('distance')
 plt.ylabel('Runtime (ms)')
 plt.title('Runtimes')
 
-# Adjust the layout to avoid overlap and display all subplots clearly
 plt.tight_layout()
 plt.show()
