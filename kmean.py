@@ -40,7 +40,7 @@ tps1 = time.time ()
 max_cluster = 30
 
 scores_name= ["silhouette", "calvinski", "davies"]
-best_results = [[0],[0],[0]]
+best_results = [[0],[0],[9999]]
 scores = [[], [], []]
 n_clusters = np.arange(2, max_cluster + 1 )
 
@@ -79,7 +79,7 @@ for k in n_clusters:
         best_results[0] = [silhouette, k, labels]
     if calinski_harabasz >= best_results[1][0] :
         best_results[1] = [calinski_harabasz, k, labels]
-    if davies_bouldin >= best_results[2][0] :
+    if davies_bouldin <= best_results[2][0] :
         best_results[2] = [davies_bouldin , k, labels]
 
 # Affichage clustering

@@ -32,7 +32,7 @@ f0 = [x[0] for x in datanp]  # tous les elements de la premiere colonne
 f1 = [x[1] for x in datanp] # tous les elements de la deuxieme colonne
 
 scores_name= ["silhouette", "calvinski", "davies"]
-best_results = [[0],[0],[0]]
+best_results = [[0],[0],[9999]]
 scores = [[], [], []]
 
 if len(sys.argv) > 1 : 
@@ -83,7 +83,7 @@ for k in n_clusters:
         best_results[0] = [silhouette, k, leaves, labels]
     if calinski_harabasz >= best_results[1][0] :
         best_results[1] = [calinski_harabasz, k, leaves, labels]
-    if davies_bouldin >= best_results[2][0] :
+    if davies_bouldin <= best_results[2][0] :
         best_results[2] = [davies_bouldin , k, leaves, labels]
 
 # Affichage clustering

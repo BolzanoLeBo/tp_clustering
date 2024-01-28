@@ -51,7 +51,7 @@ plt.plot()
 '''
 
 scores_name= ["silhouette", "calvinski", "davies"]
-best_results = [[0],[0],[0]]
+best_results = [[0],[0],[9999]]
 scores = [[], [], []]
 d_min = 5000
 d_max = 500000
@@ -94,7 +94,7 @@ for d in distances:
         best_results[0] = [silhouette, k, d, leaves, labels]
     if calinski >= best_results[1][0] :
         best_results[1] = [calinski, k, d, leaves, labels]
-    if davies >= best_results[2][0] :
+    if davies <= best_results[2][0] :
         best_results[2] = [davies, k, d, leaves, labels]
 
 # Affichage clustering
