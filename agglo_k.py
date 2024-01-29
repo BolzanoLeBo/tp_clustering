@@ -40,7 +40,7 @@ if len(sys.argv) > 1 :
 else : 
     linkage = 'average'
 
-max_cluster = 50
+max_cluster = 30
 
 
 n_clusters = np.arange(2, max_cluster + 1 )
@@ -93,7 +93,7 @@ plt.suptitle(f"Aglomerative Clustering Results by choosing k for Linkage: {linka
 for i, (score, k, leaves, labels) in enumerate(best_results):
     plt.subplot(2, 3, i+1)  
     plt.scatter(f0, f1, c=labels, s=8)
-    plt.title(f"nb clusters = {k} / nb feuilles = {leaves} score {scores_name[i]}")
+    plt.title(f"k={k} / {leaves} leaves / score {scores_name[i]} : {round(score,2)}")
 
 # Second row for the clustering scores and runtimes
 # Silhouette and Davies-Bouldin scores

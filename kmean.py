@@ -17,7 +17,7 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_har
 #
 # Note : chaque exemple du jeu de donnees contient aussi un
 # numero de cluster.On retire cette information
-path = '../dataset-rapport/x1.txt'
+path = '../dataset-rapport/zz1.txt'
 # Open the file in read mode
 databrut = np.loadtxt(path)
 datanp = [ [x[0] ,x[1]] for x in databrut  ]
@@ -89,7 +89,7 @@ plt.suptitle(f"kmean results")
 for i, (score, k, labels) in enumerate(best_results):
     plt.subplot(2, 3, i+1) 
     plt.scatter(f0, f1, c=labels, s=8)
-    plt.title(f"nb clusters = {k} / score {scores_name[i]}")
+    plt.title(f"nb clusters = {k} / score {scores_name[i]} : {score}")
 
 # Second row for the clustering scores and runtimes
 # Silhouette and Davies-Bouldin scores

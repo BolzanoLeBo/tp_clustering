@@ -26,4 +26,9 @@ A representation of the clustering output for the three best scores (silhouette,
 
 ---------------------------------------------------------------------------------------------------
 
-You can choose which dataset to choose by modifying the path variable. 
+You can choose which dataset to use by modifying the path variable. 
+
+
+---------------------------------------------------------------------------------------------------
+
+agglo_d_all_linkage compute the same think than agglo_d but loop on every linkages 

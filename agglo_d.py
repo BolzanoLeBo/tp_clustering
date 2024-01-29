@@ -21,7 +21,7 @@ import sys
 #
 # Note : chaque exemple du jeu de donnees contient aussi un
 # numero de cluster.On retire cette information
-path = '../dataset-rapport/X1.txt'
+path = '../dataset-rapport/x1.txt'
 # Open the file in read mode
 databrut = np.loadtxt(path)
 datanp = [ [x[0] ,x[1]] for x in databrut]
@@ -53,9 +53,9 @@ plt.plot()
 scores_name= ["silhouette", "calvinski", "davies"]
 best_results = [[0],[0],[9999]]
 scores = [[], [], []]
-d_min = 5000
+d_min = 25000
 d_max = 500000
-step = 10000
+step = 20000
 distances = np.arange(d_min, d_max, step)
 list_t = []
 for d in distances: 
@@ -105,7 +105,7 @@ plt.suptitle(f"Aglomerative Clustering Results by choosing dist for Linkage: {li
 for i, (score, k, d, leaves, labels) in enumerate(best_results):
     plt.subplot(2, 3, i+1)  
     plt.scatter(f0, f1, c=labels, s=8)
-    plt.title(f"nb clusters = {k} / dist = {d} / nb feuilles = {leaves} score {scores_name[i]}")
+    plt.title(f"k={k} / d={d} / {leaves} leaves / score {scores_name[i]} : {round(score,2)}")
 
 # Second row for the clustering scores and runtimes
 # Silhouette and Davies-Bouldin scores
